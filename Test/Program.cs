@@ -1,7 +1,10 @@
 ﻿using CmlLib.Core;
 using MinecraftNbtWorld;
 
-MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_17_1 amplified");
+//MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_2_5 Test");
+//MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Survival 1_9_4");
+MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Minecraft Survival 1_16_5");
+//MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_17_1 amplified");
 
 Console.WriteLine("Level name: " + world.Level.LevelName);
 Console.WriteLine("Level GameMode: " + world.Level.LevelGameMode.ToString());
@@ -36,3 +39,9 @@ foreach (var rule in world.Level.GameRulesList)
 {
     Console.WriteLine(rule.GameRule + ", " + rule.Value);
 }
+
+Console.WriteLine();
+Console.WriteLine("World Spawn Location: ");
+Console.WriteLine("X: " + world.Level.SpawnLocation.X);
+Console.WriteLine("Y: " + world.Level.SpawnLocation.Y);
+Console.WriteLine("Z: " + world.Level.SpawnLocation.Z);

@@ -2,7 +2,7 @@
 using MinecraftNbtWorld.Converters;
 using MinecraftNbtWorld.Enums;
 using MinecraftNbtWorld.Level;
-using MinecraftNbtWorldViewer.Level.GameRule;
+using MinecraftNbtWorldViewer.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +58,11 @@ namespace MinecraftNbtWorld
                 //get level gamemode
                 Level.LevelGameMode = (GameModes)LevelDataCompound.Get<NbtInt>("GameType")?.IntValue;
                 //get level difficulty
-                Level.LevelDifficulty = (Difficulties)LevelDataCompound.Get<NbtByte>("Difficulty")?.ByteValue;
+                var difficulty = LevelDataCompound.Get<NbtByte>("Difficulty")?.ByteValue;
+                if (difficulty.HasValue)
+                {
+                    Level.LevelDifficulty = (Difficulties)difficulty;
+                }
 
                 //get initialized
                 Level.initialized = Convert.ToBoolean(LevelDataCompound.Get<NbtByte>("initialized")?.ByteValue);
@@ -69,10 +73,10 @@ namespace MinecraftNbtWorld
                 Level.IsThundering = Convert.ToBoolean(LevelDataCompound.Get<NbtByte>("thundering")?.ByteValue);
 
                 //get level version name
+                Level.LevelVersion = new MinecraftNbtWorldViewer.Classes.MVersion();
                 NbtCompound versioncompound = LevelDataCompound.Get<NbtCompound>("Version");
                 if (versioncompound != null)
                 {
-                    Level.LevelVersion = new MinecraftNbtWorldViewer.Level.Version.MVersion();
                     foreach (NbtTag tag in versioncompound.Tags)
                     {
                         if (tag.TagType == NbtTagType.String && tag.Name == "Name")
@@ -133,10 +137,11 @@ namespace MinecraftNbtWorld
                 Level.RemainingDayTimeSeconds = TickToTimeConverter.TicksToSeconds(LevelDataCompound.Get<NbtLong>("LastPlayed")?.LongValue);
 
                 //get all gamerules
+                Level.GameRulesList = new List<MGameRule>();
                 NbtCompound gamerulesTag = LevelDataCompound.Get<NbtCompound>("GameRules");
                 if (gamerulesTag != null)
                 {
-                    Level.GameRulesList = new List<MGameRule>();
+                    Level.GameRulesCount = gamerulesTag.Count;
                     foreach (NbtString tag in gamerulesTag.Tags)
                     {
                         MGameRule rule = new MGameRule();
@@ -154,6 +159,11 @@ namespace MinecraftNbtWorld
                         Level.GameRulesList.Add(rule);
                     }
                 }
+
+                Level.SpawnLocation = new MinecraftNbtWorldViewer.Classes.MLocation();
+                Level.SpawnLocation.X = LevelDataCompound.Get<NbtInt>("SpawnX")?.IntValue;
+                Level.SpawnLocation.Y = LevelDataCompound.Get<NbtInt>("SpawnY")?.IntValue;
+                Level.SpawnLocation.Z = LevelDataCompound.Get<NbtInt>("SpawnZ")?.IntValue;
             }
         }
 

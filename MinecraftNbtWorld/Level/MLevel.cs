@@ -1,6 +1,6 @@
 ﻿using CmlLib.Core.Version;
 using MinecraftNbtWorld.Enums;
-using MinecraftNbtWorldViewer.Level.GameRule;
+using MinecraftNbtWorldViewer.Classes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
@@ -15,7 +15,7 @@ namespace MinecraftNbtWorld.Level
         public string? LevelName;
         public GameModes? LevelGameMode;
         public Difficulties? LevelDifficulty;
-        public MinecraftNbtWorldViewer.Level.Version.MVersion LevelVersion;
+        public MinecraftNbtWorldViewer.Classes.MVersion? LevelVersion;
 
         public bool AllowCommands;
         public bool IsDifficultyLocked;
@@ -35,6 +35,9 @@ namespace MinecraftNbtWorld.Level
 
         public double RemainingDayTimeSeconds;
 
+        public int GameRulesCount;
         public List<MGameRule> GameRulesList;
+
+        public MLocation? SpawnLocation;
     }
 }

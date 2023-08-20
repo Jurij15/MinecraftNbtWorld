@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MinecraftNbtWorldViewer.Level.Version
+namespace MinecraftNbtWorldViewer.Classes
 {
     public class MVersion
     {
