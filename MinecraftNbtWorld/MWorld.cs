@@ -167,6 +167,7 @@ namespace MinecraftNbtWorld
                 Level.Player = new MinecraftNbtWorldViewer.Level.Player.MPlayer();
 
                 //load abilites
+                Level.Player.Abilities = new List<MAbility>();
                 NbtCompound AbilitiesCompound = PlayerCompound.Get<NbtCompound>("abilities");
                 foreach (NbtTag tag in AbilitiesCompound.Tags)
                 {
