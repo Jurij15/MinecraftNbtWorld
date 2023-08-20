@@ -6,9 +6,18 @@ using System.Threading.Tasks;
 
 namespace MinecraftNbtWorldViewer.Classes
 {
+    public enum AbilityValueType
+    {
+        Boolean,
+        Float
+    }
     public class MAbility
     {
-        public string Name;
-        public string Value;
+        public AbilityValueType? ValueType;
+
+        public string? Name;
+
+        public bool? BoolValue;
+        public float? FloatValue;
     }
 }

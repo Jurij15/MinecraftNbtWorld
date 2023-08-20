@@ -161,8 +161,31 @@ namespace MinecraftNbtWorld
                 Level.SpawnLocation.Y = LevelDataCompound.Get<NbtInt>("SpawnY")?.IntValue;
                 Level.SpawnLocation.Z = LevelDataCompound.Get<NbtInt>("SpawnZ")?.IntValue;
 
+
+                NbtCompound PlayerCompound = LevelDataCompound.Get<NbtCompound>("Player");
                 //load player things
                 Level.Player = new MinecraftNbtWorldViewer.Level.Player.MPlayer();
+
+                //load abilites
+                NbtCompound AbilitiesCompound = PlayerCompound.Get<NbtCompound>("abilities");
+                foreach (NbtTag tag in AbilitiesCompound.Tags)
+                {
+                    MAbility ability = new MAbility();
+                    if (tag.TagType == NbtTagType.Byte)
+                    {
+                        ability.ValueType = AbilityValueType.Boolean;
+                        ability.BoolValue = Convert.ToBoolean(tag.ByteValue);
+                    }
+                    if (tag.TagType == NbtTagType.Float)
+                    {
+                        ability.ValueType = AbilityValueType.Float;
+                        ability.FloatValue = tag.FloatValue;
+                    }
+
+                    ability.Name = tag.Name;
+
+                    Level.Player.Abilities.Add(ability);
+                }
             }
         }
 

@@ -2,8 +2,8 @@
 using MinecraftNbtWorld;
 
 //MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_2_5 Test");
-//MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Survival 1_9_4");
-MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Minecraft Survival 1_16_5");
+MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Survival 1_9_4");
+//MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Minecraft Survival 1_16_5");
 //MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_17_1 amplified");
 
 Console.WriteLine("Level name: " + world.Level.LevelName);
@@ -34,7 +34,7 @@ Console.WriteLine("Remaining day time: " + world.Level.RemainingDayTimeSeconds.T
 
 Console.WriteLine();
 
-Console.WriteLine("All GameRules: ");
+Console.WriteLine("All GameRules with values: ");
 foreach (var rule in world.Level.GameRulesList)
 {
     Console.WriteLine(rule.GameRule + ", " + rule.Value);

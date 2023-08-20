@@ -43,6 +43,6 @@ namespace MinecraftNbtWorld.Level
         public MLocation? SpawnLocation;
 
         //player
-        public MPlayer Player;
+        public MPlayer? Player;
     }
 }

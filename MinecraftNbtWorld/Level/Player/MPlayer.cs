@@ -1,4 +1,5 @@
-﻿using MinecraftNbtWorldViewer.Classes;
+﻿using MinecraftNbtWorld.Enums;
+using MinecraftNbtWorldViewer.Classes;
 using MinecraftNbtWorldViewer.Classes.Motion;
 using MinecraftNbtWorldViewer.Classes.Positioning;
 using System;
@@ -38,11 +39,12 @@ namespace MinecraftNbtWorldViewer.Level.Player
         public short? Health;
         public short? HurtTime;
 
-        public byte? OnGround;
+        public bool? OnGround;
 
         public int? PlayerGameType;
+        public GameModes? PlayerGameMode; //easier to use
 
-        public byte? Sleeping;
+        public bool? Sleeping;
         public short? SleepTimer;
 
         public int? XpLevel;
