@@ -1,6 +1,8 @@
 ﻿using CmlLib.Core.Version;
 using MinecraftNbtWorld.Enums;
 using MinecraftNbtWorldViewer.Classes;
+using MinecraftNbtWorldViewer.Classes.Positioning;
+using MinecraftNbtWorldViewer.Level.Player;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
@@ -39,5 +41,8 @@ namespace MinecraftNbtWorld.Level
         public List<MGameRule> GameRulesList;
 
         public MLocation? SpawnLocation;
+
+        //player
+        public MPlayer Player;
     }
 }

@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace MinecraftNbtWorldViewer.Classes
 {
-    public class MLocation
+    public class MAbility
     {
-        public int? X;
-        public int? Y;
-        public int? Z;
+        public string Name;
+        public string Value;
     }
 }

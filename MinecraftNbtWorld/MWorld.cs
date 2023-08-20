@@ -28,10 +28,6 @@ namespace MinecraftNbtWorld
 
         void LoadWorld()
         {
-            //Load the NbtFile and DataCompound
-
-
-
             //Load Level file
             LoadLevel();
         }
@@ -160,10 +156,13 @@ namespace MinecraftNbtWorld
                     }
                 }
 
-                Level.SpawnLocation = new MinecraftNbtWorldViewer.Classes.MLocation();
+                Level.SpawnLocation = new MinecraftNbtWorldViewer.Classes.Positioning.MLocation();
                 Level.SpawnLocation.X = LevelDataCompound.Get<NbtInt>("SpawnX")?.IntValue;
                 Level.SpawnLocation.Y = LevelDataCompound.Get<NbtInt>("SpawnY")?.IntValue;
                 Level.SpawnLocation.Z = LevelDataCompound.Get<NbtInt>("SpawnZ")?.IntValue;
+
+                //load player things
+                Level.Player = new MinecraftNbtWorldViewer.Level.Player.MPlayer();
             }
         }
 
