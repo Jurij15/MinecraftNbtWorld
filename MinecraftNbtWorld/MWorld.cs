@@ -3,6 +3,7 @@ using MinecraftNbtWorld.Converters;
 using MinecraftNbtWorld.Enums;
 using MinecraftNbtWorld.Level;
 using MinecraftNbtWorldViewer.Classes;
+using MinecraftNbtWorldViewer.Classes.Inventory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -221,6 +222,43 @@ namespace MinecraftNbtWorld
                 Level.Player.Motion.X = mx;
                 Level.Player.Motion.Y = my;
                 Level.Player.Motion.Z = mz;
+
+                //HERE: Implement other values (like gamemode, issleeping, xp, etc)
+
+
+
+
+
+                //Inventory
+                Level.Player.Inventory = new MinecraftNbtWorldViewer.Level.Player.Inventory.MInventory();
+                Level.Player.Inventory.InventoryItems = new List<MInventoryItem>();
+                NbtList InventoryCompound = PlayerCompound.Get<NbtList>("Inventory");
+                Level.Player.Inventory.InventoryItemsCount = InventoryCompound.Count;
+                foreach (NbtCompound ItemCompound in InventoryCompound)
+                {
+                    MInventoryItem inventoryItem = new MInventoryItem();
+
+                    //get the count and slot (is the same on every version so far)
+                    inventoryItem.Count = ItemCompound.Get<NbtByte>("Count").ByteValue;
+                    inventoryItem.Slot = ItemCompound.Get<NbtByte>("Slot").ByteValue;
+
+                    //get the id (string on 1.8+ (i think), else its a short)
+                    NbtTag IDTag = ItemCompound.Get<NbtTag>("id");
+                    if (IDTag.TagType == NbtTagType.Short)
+                    {
+                        inventoryItem.IDDataType = MInventoryItemIDDataType.Short;
+                        inventoryItem.ShortID = IDTag.ShortValue;
+                    }
+                    else if (IDTag.TagType == NbtTagType.String)
+                    {
+                        inventoryItem.IDDataType = MInventoryItemIDDataType.String;
+                        inventoryItem.StringID = IDTag.StringValue;
+                    }
+
+
+
+                    Level.Player.Inventory.InventoryItems.Add(inventoryItem);
+                }
             }
         }
 

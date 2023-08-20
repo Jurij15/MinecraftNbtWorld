@@ -1,7 +1,9 @@
 ﻿using MinecraftNbtWorld.Enums;
 using MinecraftNbtWorldViewer.Classes;
+using MinecraftNbtWorldViewer.Classes.Inventory;
 using MinecraftNbtWorldViewer.Classes.Motion;
 using MinecraftNbtWorldViewer.Classes.Positioning;
+using MinecraftNbtWorldViewer.Level.Player.Inventory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +19,9 @@ namespace MinecraftNbtWorldViewer.Level.Player
         public MRotation? Rotation;
         public MMotion? Motion;
 
-        public List<MAbility> Abilities;
+        public List<MAbility>? Abilities;
 
-        //INVENTORY
-        //Inventory is weird, newer versions have different data types and properties
-        //They changed it on 1.8 I believe
+        public MInventory? Inventory;
 
         //idk if any of these are usefull, but here are all of them
         public short? Air;

@@ -1,6 +1,7 @@
 ﻿using CmlLib.Core;
 using MinecraftNbtWorld;
 using MinecraftNbtWorldViewer.Classes;
+using MinecraftNbtWorldViewer.Classes.Inventory;
 
 //MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_2_5 Test");
 //MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Survival 1_9_4");
@@ -86,3 +87,21 @@ Console.WriteLine();
 Console.WriteLine("Player Rotation: ");
 Console.WriteLine("Yaw: " + world.Level.Player.Rotation.Yaw);
 Console.WriteLine("Pitch: " + world.Level.Player.Rotation.Pitch);
+
+Console.WriteLine();
+
+Console.WriteLine("Player Inventory: ");
+foreach (MInventoryItem item in world.Level.Player.Inventory.InventoryItems)
+{
+    Console.WriteLine("-*-*Inventory item*-*-");
+    Console.WriteLine("Count: "+item.Count.ToString());
+    Console.WriteLine("Slot: " + item.Slot.ToString());
+    if (item.IDDataType == MInventoryItemIDDataType.Short)
+    {
+        Console.WriteLine("ID: "+item.ShortID.ToString());
+    }
+    if (item.IDDataType == MInventoryItemIDDataType.String)
+    {
+        Console.WriteLine("ID: " + item.StringID.ToString());
+    }
+}
