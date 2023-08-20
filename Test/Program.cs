@@ -1,6 +1,7 @@
 ﻿using CmlLib.Core;
 using MinecraftNbtWorld;
 using MinecraftNbtWorldViewer.Classes;
+using MinecraftNbtWorldViewer.Classes.Enchantments;
 using MinecraftNbtWorldViewer.Classes.Inventory;
 
 //MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_2_5 Test");
@@ -90,7 +91,7 @@ Console.WriteLine("Pitch: " + world.Level.Player.Rotation.Pitch);
 
 Console.WriteLine();
 
-Console.WriteLine("Player Inventory: ");
+Console.WriteLine($"Player Inventory (Total Items {world.Level.Player.Inventory.InventoryItemsCount.ToString()}): ");
 foreach (MInventoryItem item in world.Level.Player.Inventory.InventoryItems)
 {
     Console.WriteLine("-*-*Inventory item*-*-");
@@ -103,5 +104,31 @@ foreach (MInventoryItem item in world.Level.Player.Inventory.InventoryItems)
     if (item.IDDataType == MInventoryItemIDDataType.String)
     {
         Console.WriteLine("ID: " + item.StringID.ToString());
+    }
+    Console.WriteLine("Repair Cost: " + item.RepairCost.ToString());
+    if (item.DamageDataType == MInventoryItemDamageDataType.Short)
+    {
+        Console.WriteLine("Damage: " + item.ShortDamage.ToString());
+    }
+    if (item.DamageDataType == MInventoryItemDamageDataType.Integer)
+    {
+        Console.WriteLine("Damage: " + item.IntegerDamage.ToString());
+    }
+    Console.WriteLine($"Enchantments (id,level), count: {item.Enchantments.Count}:");
+    foreach (MEnchantment enchantment in item.Enchantments)
+    {
+        string message = "";
+        if (enchantment.IDDataType == MEnchantmentIDDataType.Short)
+        {
+            message = message + enchantment.ShortID;
+        }
+        else if (enchantment.IDDataType == MEnchantmentIDDataType.String)
+        {
+            message = message + enchantment.StringID;
+        }
+
+        message = message + ", " + enchantment.Level;
+
+        Console.WriteLine(message);
     }
 }

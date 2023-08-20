@@ -3,10 +3,12 @@ using MinecraftNbtWorld.Converters;
 using MinecraftNbtWorld.Enums;
 using MinecraftNbtWorld.Level;
 using MinecraftNbtWorldViewer.Classes;
+using MinecraftNbtWorldViewer.Classes.Enchantments;
 using MinecraftNbtWorldViewer.Classes.Inventory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -237,6 +239,7 @@ namespace MinecraftNbtWorld
                 foreach (NbtCompound ItemCompound in InventoryCompound)
                 {
                     MInventoryItem inventoryItem = new MInventoryItem();
+                    inventoryItem.Enchantments = new List<MinecraftNbtWorldViewer.Classes.Enchantments.MEnchantment>();
 
                     //get the count and slot (is the same on every version so far)
                     inventoryItem.Count = ItemCompound.Get<NbtByte>("Count").ByteValue;
@@ -256,6 +259,75 @@ namespace MinecraftNbtWorld
                     }
 
 
+                    //get the damage
+                    //this is stored in a seperate compound in some versions, while on some is directly in the item compound
+
+                    bool IsDamageInCompound = false;
+
+                    //go throught the whole compound
+                    foreach (NbtTag tag in ItemCompound.Tags)
+                    {
+                        //we found the compound with more stats, only on newer versions
+                        if (tag.TagType == NbtTagType.Compound)
+                        {
+                            NbtCompound statsCompound = (NbtCompound)tag;
+                            if (statsCompound != null)
+                            {
+                                foreach (var item in statsCompound.Tags)
+                                {
+                                    if (item.TagType == NbtTagType.Int && item.Name == "RepairCost")
+                                    {
+                                        inventoryItem.RepairCost = item.IntValue;
+                                    }
+
+                                    if (item.TagType == NbtTagType.Int && item.Name == "Damage")
+                                    {
+                                        IsDamageInCompound = true;
+
+                                        inventoryItem.DamageDataType = MInventoryItemDamageDataType.Integer;
+                                        inventoryItem.IntegerDamage = item.IntValue;
+                                    }
+
+                                    //here is the enchantments list
+                                    if(item.TagType == NbtTagType.List)
+                                    {
+                                        NbtList enchantmentsList = (NbtList)item;
+                                        foreach (NbtCompound enchantment in enchantmentsList)
+                                        {
+                                            MEnchantment menchamtment = new MEnchantment();
+                                            foreach (NbtTag value in enchantment.Tags)
+                                            {
+                                                if (value.TagType == NbtTagType.Short && value.Name == "lvl")
+                                                {
+                                                    //its the enchantment level
+                                                    menchamtment.Level = value.ShortValue;
+                                                }
+
+                                                if (value.TagType == NbtTagType.Short && value.Name == "id")
+                                                {
+                                                    menchamtment.IDDataType = MEnchantmentIDDataType.Short;
+                                                    menchamtment.ShortID = value.ShortValue;
+                                                }
+
+                                                if (value.TagType == NbtTagType.String && value.Name == "id")
+                                                {
+                                                    menchamtment.IDDataType = MEnchantmentIDDataType.String;
+                                                    menchamtment.StringID = value.StringValue;
+                                                }
+                                            }
+
+                                            inventoryItem.Enchantments.Add(menchamtment);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (tag.TagType == NbtTagType.Short && tag.Name == "Damage" && !IsDamageInCompound)
+                        {
+                            inventoryItem.DamageDataType = MInventoryItemDamageDataType.Short;
+                            inventoryItem.ShortDamage = ItemCompound.Get<NbtShort>("Damage").ShortValue;
+                        }
+                    }
 
                     Level.Player.Inventory.InventoryItems.Add(inventoryItem);
                 }
