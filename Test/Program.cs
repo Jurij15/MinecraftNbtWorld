@@ -1,10 +1,11 @@
 ﻿using CmlLib.Core;
 using MinecraftNbtWorld;
+using MinecraftNbtWorldViewer.Classes;
 
 //MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_2_5 Test");
-MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Survival 1_9_4");
+//MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Survival 1_9_4");
 //MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Minecraft Survival 1_16_5");
-//MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_17_1 amplified");
+MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_17_1 amplified");
 
 Console.WriteLine("Level name: " + world.Level.LevelName);
 Console.WriteLine("Level GameMode: " + world.Level.LevelGameMode.ToString());
@@ -45,3 +46,43 @@ Console.WriteLine("World Spawn Location: ");
 Console.WriteLine("X: " + world.Level.SpawnLocation.X);
 Console.WriteLine("Y: " + world.Level.SpawnLocation.Y);
 Console.WriteLine("Z: " + world.Level.SpawnLocation.Z);
+
+Console.WriteLine();
+Console.WriteLine("------Player Details------");
+Console.WriteLine();
+
+Console.WriteLine("Player Abilities: ");
+foreach (MAbility ability in world.Level.Player.Abilities)
+{
+    string message;
+    message = ability.Name;
+    if (ability.ValueType == AbilityValueType.Boolean)
+    {
+        message = message + ", " + ability.BoolValue;
+    }
+    else if (ability.ValueType == AbilityValueType.Float)
+    {
+        message = message + ", " + ability.FloatValue;
+    }
+    Console.WriteLine(message);
+}
+
+Console.WriteLine();
+
+Console.WriteLine("Player Position: ");
+Console.WriteLine("X: " + world.Level.Player.Position.X);
+Console.WriteLine("Y: " + world.Level.Player.Position.Y);
+Console.WriteLine("Z: " + world.Level.Player.Position.Z);
+
+Console.WriteLine();
+
+Console.WriteLine("Player Motion: ");
+Console.WriteLine("X: " + world.Level.Player.Motion.X);
+Console.WriteLine("Y: " + world.Level.Player.Motion.Y);
+Console.WriteLine("Z: " + world.Level.Player.Motion.Z);
+
+Console.WriteLine();
+
+Console.WriteLine("Player Rotation: ");
+Console.WriteLine("Yaw: " + world.Level.Player.Rotation.Yaw);
+Console.WriteLine("Pitch: " + world.Level.Player.Rotation.Pitch);

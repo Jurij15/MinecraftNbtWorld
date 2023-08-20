@@ -187,6 +187,40 @@ namespace MinecraftNbtWorld
 
                     Level.Player.Abilities.Add(ability);
                 }
+
+                //load position
+                Level.Player.Position = new MinecraftNbtWorldViewer.Classes.Positioning.MPosition();
+                NbtList list = PlayerCompound.Get<NbtList>("Pos");
+
+                double x = list[0].DoubleValue;
+                double y = list[1].DoubleValue;
+                double z = list[2].DoubleValue;
+
+                Level.Player.Position.X = x;
+                Level.Player.Position.Y = y;
+                Level.Player.Position.Z = z;
+
+                //load rotation
+                Level.Player.Rotation = new MinecraftNbtWorldViewer.Classes.Positioning.MRotation();
+                NbtList rot = PlayerCompound.Get<NbtList>("Rotation");
+
+                float? yaw = rot[0].FloatValue;
+                float? pitch = rot[1].FloatValue;
+
+                Level.Player.Rotation.Yaw = yaw;
+                Level.Player.Rotation.Pitch = pitch;
+
+                //load motion
+                Level.Player.Motion = new MinecraftNbtWorldViewer.Classes.Motion.MMotion();
+                NbtList molist = PlayerCompound.Get<NbtList>("Pos");
+
+                double mx = molist[0].DoubleValue;
+                double my = molist[1].DoubleValue;
+                double mz = molist[2].DoubleValue;
+
+                Level.Player.Motion.X = mx;
+                Level.Player.Motion.Y = my;
+                Level.Player.Motion.Z = mz;
             }
         }
 
