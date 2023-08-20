@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinecraftNbtWorld", "MinecraftNbtWorld\MinecraftNbtWorld.csproj", "{3CD80C7C-56BD-492D-96FF-05E7D67F88CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinecraftNbtWorldViewer", "MinecraftNbtWorld\MinecraftNbtWorldViewer.csproj", "{3CD80C7C-56BD-492D-96FF-05E7D67F88CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{32A457B3-BDC0-4F0C-82EF-786E631B68B8}"
 EndProject
