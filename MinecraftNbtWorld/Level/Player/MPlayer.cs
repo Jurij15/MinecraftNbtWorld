@@ -14,7 +14,6 @@ namespace MinecraftNbtWorldViewer.Level.Player
 {
     public class MPlayer
     {
-        //THESE PROPERTIES WERE IN 1.2.5
         public MPosition? Position;
         public MRotation? Rotation;
         public MMotion? Motion;
@@ -23,13 +22,7 @@ namespace MinecraftNbtWorldViewer.Level.Player
 
         public MInventory? Inventory;
 
-        //idk if any of these are usefull, but here are all of them
-        public short? Air;
-        public short? AttackTime;
-        public short? DeathTime;
         public int? Dimension;
-        public float? FallDistance;
-        public short? Fire;
 
         public float? FoodExhaustionLevel;
         public int? FoodLevel;
@@ -37,7 +30,6 @@ namespace MinecraftNbtWorldViewer.Level.Player
         public int? FoodTickTimer;
 
         public short? Health;
-        public short? HurtTime;
 
         public bool? OnGround;
 
@@ -45,13 +37,9 @@ namespace MinecraftNbtWorldViewer.Level.Player
         public GameModes? PlayerGameMode; //easier to use
 
         public bool? Sleeping;
-        public short? SleepTimer;
 
         public int? XpLevel;
         public float? XpP;
         public int? XpTotal;
-
-        //THESE PROPERTIES WERE IN MY 1.17.1 WORLD
-        //i will add ones that are missing
     }
 }
