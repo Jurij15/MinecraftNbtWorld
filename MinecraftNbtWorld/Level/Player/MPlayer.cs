@@ -22,14 +22,16 @@ namespace MinecraftNbtWorldViewer.Level.Player
 
         public MInventory? Inventory;
 
-        public int? Dimension;
+        public int? DimensionInt;
+        public string? DimensionString; //for newer versions
 
         public float? FoodExhaustionLevel;
         public int? FoodLevel;
         public float? FoodSaturationLevel;
         public int? FoodTickTimer;
 
-        public short? Health;
+        public short? HealthShort;
+        public float? HealthFloat;
 
         public bool? OnGround;
 

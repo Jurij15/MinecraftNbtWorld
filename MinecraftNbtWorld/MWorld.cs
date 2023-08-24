@@ -331,6 +331,42 @@ namespace MinecraftNbtWorld
 
                     Level.Player.Inventory.InventoryItems.Add(inventoryItem);
                 }
+
+                NbtTag dimensiontag = PlayerCompound.Get<NbtTag>("Dimension");
+                if (dimensiontag.TagType == NbtTagType.Int)
+                {
+                    Level.Player.DimensionInt = dimensiontag.IntValue;
+                }
+                else if (dimensiontag.TagType == NbtTagType.String)
+                {
+                    Level.Player.DimensionString = dimensiontag.StringValue;
+                }
+
+                Level.Player.FoodExhaustionLevel = PlayerCompound.Get<NbtFloat>("foodExhaustionLevel").FloatValue;
+                Level.Player.FoodLevel = PlayerCompound.Get<NbtInt>("foodLevel").IntValue;
+                Level.Player.FoodSaturationLevel = PlayerCompound.Get<NbtFloat>("foodSaturationLevel").FloatValue;
+                Level.Player.FoodTickTimer = PlayerCompound.Get<NbtInt>("foodTickTimer").IntValue;
+
+                NbtTag healthtag = PlayerCompound.Get<NbtTag>("Health");
+                if (healthtag.TagType == NbtTagType.Short)
+                {
+                    Level.Player.HealthShort = healthtag.ShortValue;
+                }
+                else if(healthtag.TagType == NbtTagType.Float)
+                {
+                    Level.Player.HealthFloat = healthtag.FloatValue;
+                }
+
+                Level.Player.OnGround = Convert.ToBoolean(PlayerCompound.Get<NbtByte>("OnGround").ByteValue);
+
+                NbtInt playergamemodetag = PlayerCompound.Get<NbtInt>("playerGameType");
+
+                Level.Player.PlayerGameType = playergamemodetag.IntValue;
+                Level.Player.PlayerGameMode = (GameModes)playergamemodetag.IntValue;
+
+                Level.Player.XpLevel = PlayerCompound.Get<NbtInt>("XpLevel").IntValue;
+                Level.Player.XpP = PlayerCompound.Get<NbtFloat>("XpP").FloatValue;
+                Level.Player.XpTotal = PlayerCompound.Get<NbtInt>("XpTotal").IntValue;
             }
         }
 
