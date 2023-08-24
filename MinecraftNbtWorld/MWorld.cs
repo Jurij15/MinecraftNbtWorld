@@ -47,6 +47,9 @@ namespace MinecraftNbtWorld
             //initialize a level class
             Level = new MLevel();
 
+            //also load the leveleditor
+            Level.Editor = new Editor.LevelEditor(GetLevelDatPath());
+
             if (levelDatNbtFile.RootTag != null)
             {
                 //get the root tag

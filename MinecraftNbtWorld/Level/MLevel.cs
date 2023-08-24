@@ -1,4 +1,5 @@
 ﻿using CmlLib.Core.Version;
+using MinecraftNbtWorld.Editor;
 using MinecraftNbtWorld.Enums;
 using MinecraftNbtWorldViewer.Classes;
 using MinecraftNbtWorldViewer.Classes.Positioning;
@@ -44,5 +45,7 @@ namespace MinecraftNbtWorld.Level
 
         //player
         public MPlayer? Player;
+
+        public LevelEditor? Editor;
     }
 }
