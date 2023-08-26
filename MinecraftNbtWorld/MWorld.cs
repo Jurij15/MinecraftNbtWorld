@@ -1,6 +1,7 @@
 ﻿using fNbt;
 using MinecraftNbtWorld.Converters;
 using MinecraftNbtWorld.Enums;
+using MinecraftNbtWorld.Helpers;
 using MinecraftNbtWorld.Level;
 using MinecraftNbtWorldViewer.Classes;
 using MinecraftNbtWorldViewer.Classes.Enchantments;
@@ -58,7 +59,11 @@ namespace MinecraftNbtWorld
                 //get level name
                 Level.LevelName = LevelDataCompound.Get<NbtString>("LevelName")?.StringValue;
                 //get level gamemode
-                Level.LevelGameMode = (GameModes)LevelDataCompound.Get<NbtInt>("GameType")?.IntValue;
+                NbtTag gametypetag = LevelDataCompound.Get<NbtTag>("GameType");
+                if (gametypetag != null)
+                {
+                    Level.LevelGameMode = (GameModes)gametypetag.IntValue;
+                }
                 //get level difficulty
                 var difficulty = LevelDataCompound.Get<NbtByte>("Difficulty")?.ByteValue;
                 if (difficulty.HasValue)
@@ -175,23 +180,26 @@ namespace MinecraftNbtWorld
                 //load abilites
                 Level.Player.Abilities = new List<MAbility>();
                 NbtCompound AbilitiesCompound = PlayerCompound.Get<NbtCompound>("abilities");
-                foreach (NbtTag tag in AbilitiesCompound.Tags)
+                if (AbilitiesCompound != null)
                 {
-                    MAbility ability = new MAbility();
-                    if (tag.TagType == NbtTagType.Byte)
+                    foreach (NbtTag tag in AbilitiesCompound.Tags)
                     {
-                        ability.ValueType = AbilityValueType.Boolean;
-                        ability.BoolValue = Convert.ToBoolean(tag.ByteValue);
-                    }
-                    if (tag.TagType == NbtTagType.Float)
-                    {
-                        ability.ValueType = AbilityValueType.Float;
-                        ability.FloatValue = tag.FloatValue;
-                    }
+                        MAbility ability = new MAbility();
+                        if (tag.TagType == NbtTagType.Byte)
+                        {
+                            ability.ValueType = AbilityValueType.Boolean;
+                            ability.BoolValue = Convert.ToBoolean(tag.ByteValue);
+                        }
+                        if (tag.TagType == NbtTagType.Float)
+                        {
+                            ability.ValueType = AbilityValueType.Float;
+                            ability.FloatValue = tag.FloatValue;
+                        }
 
-                    ability.Name = tag.Name;
+                        ability.Name = tag.Name;
 
-                    Level.Player.Abilities.Add(ability);
+                        Level.Player.Abilities.Add(ability);
+                    }
                 }
 
                 //load position
@@ -274,7 +282,7 @@ namespace MinecraftNbtWorld
                         if (tag.TagType == NbtTagType.Compound)
                         {
                             NbtCompound statsCompound = (NbtCompound)tag;
-                            if (statsCompound != null)
+                            if (statsCompound != null && statsCompound.Name != "display")
                             {
                                 foreach (var item in statsCompound.Tags)
                                 {
@@ -295,31 +303,34 @@ namespace MinecraftNbtWorld
                                     if(item.TagType == NbtTagType.List)
                                     {
                                         NbtList enchantmentsList = (NbtList)item;
-                                        foreach (NbtCompound enchantment in enchantmentsList)
+                                        if (enchantmentsList.Name.Contains("Enchantments", StringComparison.OrdinalIgnoreCase))
                                         {
-                                            MEnchantment menchamtment = new MEnchantment();
-                                            foreach (NbtTag value in enchantment.Tags)
+                                            foreach (NbtCompound enchantment in enchantmentsList)
                                             {
-                                                if (value.TagType == NbtTagType.Short && value.Name == "lvl")
+                                                MEnchantment menchamtment = new MEnchantment();
+                                                foreach (NbtTag value in enchantment.Tags)
                                                 {
-                                                    //its the enchantment level
-                                                    menchamtment.Level = value.ShortValue;
+                                                    if (value.TagType == NbtTagType.Short && value.Name == "lvl")
+                                                    {
+                                                        //its the enchantment level
+                                                        menchamtment.Level = value.ShortValue;
+                                                    }
+
+                                                    if (value.TagType == NbtTagType.Short && value.Name == "id")
+                                                    {
+                                                        menchamtment.IDDataType = MEnchantmentIDDataType.Short;
+                                                        menchamtment.ShortID = value.ShortValue;
+                                                    }
+
+                                                    if (value.TagType == NbtTagType.String && value.Name == "id")
+                                                    {
+                                                        menchamtment.IDDataType = MEnchantmentIDDataType.String;
+                                                        menchamtment.StringID = value.StringValue;
+                                                    }
                                                 }
 
-                                                if (value.TagType == NbtTagType.Short && value.Name == "id")
-                                                {
-                                                    menchamtment.IDDataType = MEnchantmentIDDataType.Short;
-                                                    menchamtment.ShortID = value.ShortValue;
-                                                }
-
-                                                if (value.TagType == NbtTagType.String && value.Name == "id")
-                                                {
-                                                    menchamtment.IDDataType = MEnchantmentIDDataType.String;
-                                                    menchamtment.StringID = value.StringValue;
-                                                }
+                                                inventoryItem.Enchantments.Add(menchamtment);
                                             }
-
-                                            inventoryItem.Enchantments.Add(menchamtment);
                                         }
                                     }
                                 }
@@ -336,19 +347,42 @@ namespace MinecraftNbtWorld
                 }
 
                 NbtTag dimensiontag = PlayerCompound.Get<NbtTag>("Dimension");
-                if (dimensiontag.TagType == NbtTagType.Int)
+                if (!NbtTagHelper.IsTagNull(dimensiontag))
                 {
-                    Level.Player.DimensionInt = dimensiontag.IntValue;
-                }
-                else if (dimensiontag.TagType == NbtTagType.String)
-                {
-                    Level.Player.DimensionString = dimensiontag.StringValue;
+                    if (dimensiontag.TagType == NbtTagType.Int)
+                    {
+                        Level.Player.DimensionInt = dimensiontag.IntValue;
+                    }
+                    else if (dimensiontag.TagType == NbtTagType.String)
+                    {
+                        Level.Player.DimensionString = dimensiontag.StringValue;
+                    }
                 }
 
-                Level.Player.FoodExhaustionLevel = PlayerCompound.Get<NbtFloat>("foodExhaustionLevel").FloatValue;
-                Level.Player.FoodLevel = PlayerCompound.Get<NbtInt>("foodLevel").IntValue;
-                Level.Player.FoodSaturationLevel = PlayerCompound.Get<NbtFloat>("foodSaturationLevel").FloatValue;
-                Level.Player.FoodTickTimer = PlayerCompound.Get<NbtInt>("foodTickTimer").IntValue;
+                //food things
+                NbtTag FoodExhaustionLevelTag = PlayerCompound.Get<NbtTag>("foodExhaustionLevel");
+                if (FoodExhaustionLevelTag != null)
+                {
+                    Level.Player.FoodExhaustionLevel = FoodExhaustionLevelTag.FloatValue;
+                }
+
+                NbtTag foodleveltag = PlayerCompound.Get<NbtTag>("foodLevel");
+                if (!NbtTagHelper.IsTagNull(foodleveltag))
+                {
+                    Level.Player.FoodLevel = foodleveltag.IntValue;
+                }
+
+                NbtTag foodsaturationleveltag = PlayerCompound.Get<NbtTag>("foodSaturationLevel");
+                if (!NbtTagHelper.IsTagNull(foodsaturationleveltag))
+                {
+                    Level.Player.FoodSaturationLevel = foodsaturationleveltag.FloatValue;
+                }
+
+                NbtTag foodticktimertag = PlayerCompound.Get<NbtInt>("foodTickTimer");
+                if (!NbtTagHelper.IsTagNull(foodticktimertag))
+                {
+                    Level.Player.FoodTickTimer = foodticktimertag.IntValue;
+                }
 
                 NbtTag healthtag = PlayerCompound.Get<NbtTag>("Health");
                 if (healthtag.TagType == NbtTagType.Short)
@@ -360,16 +394,38 @@ namespace MinecraftNbtWorld
                     Level.Player.HealthFloat = healthtag.FloatValue;
                 }
 
-                Level.Player.OnGround = Convert.ToBoolean(PlayerCompound.Get<NbtByte>("OnGround").ByteValue);
+                NbtTag ongroundtag = PlayerCompound.Get<NbtByte>("OnGround");
+                if (!NbtTagHelper.IsTagNull(ongroundtag))
+                {
+                    Level.Player.OnGround = Convert.ToBoolean(ongroundtag.ByteValue);
+                }
 
                 NbtInt playergamemodetag = PlayerCompound.Get<NbtInt>("playerGameType");
 
-                Level.Player.PlayerGameType = playergamemodetag.IntValue;
-                Level.Player.PlayerGameMode = (GameModes)playergamemodetag.IntValue;
+                if (playergamemodetag != null)
+                {
+                    Level.Player.PlayerGameType = playergamemodetag.IntValue;
+                    Level.Player.PlayerGameMode = (GameModes)playergamemodetag.IntValue;
+                }
 
-                Level.Player.XpLevel = PlayerCompound.Get<NbtInt>("XpLevel").IntValue;
-                Level.Player.XpP = PlayerCompound.Get<NbtFloat>("XpP").FloatValue;
-                Level.Player.XpTotal = PlayerCompound.Get<NbtInt>("XpTotal").IntValue;
+                //xp stuff
+                NbtTag xpleveltag = PlayerCompound.Get<NbtInt>("XpLevel");
+                if (!NbtTagHelper.IsTagNull(xpleveltag))
+                {
+                    Level.Player.XpLevel = xpleveltag.IntValue;
+                }
+
+                NbtTag xpptag = PlayerCompound.Get<NbtFloat>("XpP");
+                if (!NbtTagHelper.IsTagNull(xpptag))
+                {
+                    Level.Player.XpP = xpptag.FloatValue;
+                }
+
+                NbtTag xptotaltag = PlayerCompound.Get<NbtInt>("XpTotal");
+                if(!NbtTagHelper.IsTagNull(xptotaltag))
+                {
+                    Level.Player.XpTotal = xptotaltag.IntValue;
+                }
             }
         }
 

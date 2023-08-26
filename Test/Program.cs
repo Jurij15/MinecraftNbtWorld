@@ -7,6 +7,14 @@ using MinecraftNbtWorldViewer.Classes.Inventory;
 //MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_2_5 Test");
 //MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Survival 1_9_4");
 //MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\Minecraft Survival 1_16_5");
+foreach (var item in Directory.GetDirectories(MinecraftPath.GetOSDefaultPath()+"\\saves"))
+{
+    //Console.WriteLine(item);
+    if (File.Exists(item+"\\level.dat"))
+    {
+        //MWorld mworld = new MWorld(item);
+    }
+}
 MWorld world = new MWorld(MinecraftPath.GetOSDefaultPath() + "\\saves\\" + "\\1_17_1 amplified");
 
 Console.WriteLine("Level name: " + world.Level.LevelName);
